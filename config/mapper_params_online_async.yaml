@@ -1,0 +1,78 @@
+slam_toolbox:
+  ros__parameters:
+
+    # Plugin params
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+    # ROS Frame Parameters
+    odom_frame: odom          # Frame for odometry (logical frame reference for handheld use)
+    map_frame: map            # Frame for the map (static reference frame)
+    base_frame: laser_frame    # Set to the LiDAR's frame since it's handheld
+
+    # Topic and Mode Parameters
+    scan_topic: /scan           # LiDAR scan topic
+    use_map_saver: true         # Enable map saving to persist map data
+    mode: mapping          # Use localization mode for scan-based localization
+
+    # Performance and Mapping Parameters
+    map_start_at_dock: false
+    debug_logging: true
+    throttle_scans: 3          # Reduces the number of scans processed to avoid excessive load in handheld use
+    transform_publish_period: 0.1  # Transform publish rate (10 Hz for smoother updates)
+    map_update_interval: 10.0   # Map updates at a slower interval for better performance in localization mode
+    resolution: 0.05            # Map resolution in meters
+    max_laser_range: 16.0       # Limit laser range to realistic range of the LiDAR
+
+    # Timing and Buffer Parameters
+    minimum_time_interval: 1.0  # Slower processing frequency to handle handheld motion without overloading
+    transform_timeout: 0.2      # Timeout for receiving transforms
+    tf_buffer_duration: 30.0    # Buffer duration to retain history for scan matching
+    stack_size_to_use: 40000000 # Stack size for larger data processing
+
+    # Enable Interactive Mode
+    enable_interactive_mode: true
+
+    # Scan Matching Parameters
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_travel_distance: 0.1 # Min distance to move before processing another scan
+    minimum_travel_heading: 0.1  # Min angle change before processing another scan
+    scan_buffer_size: 500        # Increased buffer for handheld scan storage
+    scan_buffer_maximum_scan_distance: 10.0  # Max scan distance to consider
+    link_match_minimum_response_fine: 0.1  
+    link_scan_maximum_distance: 1.5
+    loop_search_maximum_distance: 3.0
+    do_loop_closing: true         # Enable loop closure to correct for drift
+    loop_match_minimum_chain_size: 10
+    loop_match_maximum_variance_coarse: 3.0  
+    loop_match_minimum_response_coarse: 0.35    
+    loop_match_minimum_response_fine: 0.45
+
+    # Correlation Parameters
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1 
+
+    # Loop Closure Parameters
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # Scan Matcher Parameters
+    distance_variance_penalty: 0.5        # Penalty for distance variance
+    angle_variance_penalty: 1.0           # Penalty for angle variance
+
+    fine_search_angle_offset: 0.00349     # Fine angle search offset
+    coarse_search_angle_offset: 0.349     # Coarse angle search offset for initial alignment
+    coarse_angle_resolution: 0.0349       # Resolution for coarse angle
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_response_expansion: true          # Expands response for better matching accuracy
+
+    # Miscellaneous
+    map_start_at_dock: false              # Map does not start at a specific dock location
